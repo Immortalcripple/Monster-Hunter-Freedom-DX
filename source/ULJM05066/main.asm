@@ -42,7 +42,10 @@ DrinkBuffOffset			equ 0x09907784
 	Init:
 		jal 		sceKDWIA
 		nop
-		
+	
+		jal			HallSelectR
+		nop		
+	
 	ReadConfig:
 		; Open config file
 		la			a0, CONFIG_PATH
@@ -315,12 +318,14 @@ DrinkBuffOffset			equ 0x09907784
 		.align 0x4
 	CONFIG_BIN:
 		.fill 0x30, 0x00
-				
+			
 	.include "source/ULJM05066/CatSkills.asm"
 	.include "source/ULJM05066/DrinkBuff.asm"	
 	.include "source/ULJM05066/DosBonuses.asm"
 	.include "source/ULJM05066/FileLoader.asm"
 	.include "source/ULJM05066/EventLoader.asm"
+	
+	.include "source/ULJM05066/HallSelectFix.asm"
 	
 	.org 0x0882CFA4 ; Supply Chest Delay Fix
 		.dh			1

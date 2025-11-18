@@ -43,6 +43,9 @@ DrinkBuffOffset			equ 0x09907FEC
 		jal 		sceKDWIA
 		nop
 		
+		jal			HallSelectR
+		nop	
+		
 	ReadConfig:
 		; Open config file
 		la		a0, CONFIG_PATH
@@ -322,6 +325,8 @@ DrinkBuffOffset			equ 0x09907FEC
 	.include "source/ULUS10084/DosBonuses.asm"	
 	.include "source/ULUS10084/FileLoader.asm"			
 	.include "source/ULUS10084/EventLoader.asm"
+	
+	.include "source/ULUS10084/HallSelectFix.asm"
 	
 	.org 0x0882CF04 ; Supply Chest Delay Fix
 		.dh			1
