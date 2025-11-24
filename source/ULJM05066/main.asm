@@ -125,7 +125,7 @@ DrinkBuffOffset			equ 0x09907784
 		nop
 		la			t0, TrueRawOffset
 		li			t1, 0x64
-		li			t2, 0xA
+		li			t2, 0x6
 		sw			t1, 0x0(t0)
 		addiu		t0, t0, 0x4
 		bne			t2, zero, . - 0x8
@@ -319,16 +319,20 @@ DrinkBuffOffset			equ 0x09907784
 	CONFIG_BIN:
 		.fill 0x30, 0x00
 			
+	.include "source/ULJM05066/HallSelectFix.asm"		
 	.include "source/ULJM05066/CatSkills.asm"
 	.include "source/ULJM05066/DrinkBuff.asm"	
 	.include "source/ULJM05066/DosBonuses.asm"
 	.include "source/ULJM05066/FileLoader.asm"
 	.include "source/ULJM05066/EventLoader.asm"
 	
-	.include "source/ULJM05066/HallSelectFix.asm"
 	
 	.org 0x0882CFA4 ; Supply Chest Delay Fix
 		.dh			1
+		
+	.org HallSelectWHook
+		j			HallSelectW
+		nop
 .close
 
 .open "build/ULJM05066/DATA.BIN", 0

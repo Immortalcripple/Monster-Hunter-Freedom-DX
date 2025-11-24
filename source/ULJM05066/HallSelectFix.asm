@@ -19,7 +19,3 @@ HallSelectOffset		equ 0x09857C9B
 		sb			t0, 0x0(a0)
 		jr			ra
 		nop
-		
-	.org HallSelectWHook
-		j			HallSelectW
-		nop

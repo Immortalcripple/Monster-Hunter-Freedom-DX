@@ -126,7 +126,7 @@ DrinkBuffOffset			equ 0x09907FEC
 		nop
 		la			t0, TrueRawOffset
 		li			t1, 0x64
-		li			t2, 0xA
+		li			t2, 0x6
 		sw			t1, 0x0(t0)
 		addiu		t0, t0, 0x4
 		bne			t2, zero, . - 0x8
@@ -319,17 +319,22 @@ DrinkBuffOffset			equ 0x09907FEC
 		.align 0x4
 	CONFIG_BIN:
 		.fill 0x30, 0x00
-				
+	
+	.include "source/ULUS10084/HallSelectFix.asm"	
 	.include "source/ULUS10084/CatSkills.asm"	
 	.include "source/ULUS10084/DrinkBuff.asm"	
 	.include "source/ULUS10084/DosBonuses.asm"	
 	.include "source/ULUS10084/FileLoader.asm"			
 	.include "source/ULUS10084/EventLoader.asm"
 	
-	.include "source/ULUS10084/HallSelectFix.asm"
 	
 	.org 0x0882CF04 ; Supply Chest Delay Fix
 		.dh			1
+		
+			
+	.org HallSelectWHook
+		j			HallSelectW
+		nop
 .close
 
 .open "build/ULUS10084/DATA.BIN", 0

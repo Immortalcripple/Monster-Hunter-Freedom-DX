@@ -48,18 +48,18 @@ DrinkBuffOffset			equ 0x09908FCC
 		
 	ReadConfig:
 		; Open config file
-		la		a0, CONFIG_PATH
-		li		a1, 0x1
-		li		a2, 0x0
-		li		a3, 0x0
-		jal		sceIoOpen
-		li		t0, 0x0
+		la			a0, CONFIG_PATH
+		li			a1, 0x1
+		li			a2, 0x0
+		li			a3, 0x0
+		jal			sceIoOpen
+		li			t0, 0x0
 		; Check if config exists
-		li		v1, 0x80010002
-		beq		v0, v1, HookReturn
+		li			v1, 0x80010002
+		beq			v0, v1, HookReturn
 		nop
-		li		v1, 0x0
-		move	s0, v0	
+		li			v1, 0x0
+		move		s0, v0	
 		; Read config
 		move		a0, s0
 		li			a1, CONFIG_BIN
@@ -126,7 +126,7 @@ DrinkBuffOffset			equ 0x09908FCC
 		nop
 		la			t0, TrueRawOffset
 		li			t1, 0x64
-		li			t2, 0xA
+		li			t2, 0x6
 		sw			t1, 0x0(t0)
 		addiu		t0, t0, 0x4
 		bne			t2, zero, . - 0x8
@@ -310,8 +310,8 @@ DrinkBuffOffset			equ 0x09908FCC
 		nop
 		
 	HookReturn:
-		lw			ra, 0x00(sp)
-		addiu		sp, sp, 0x4
+		lw			ra, 0x0(sp)
+		addiu		sp, sp, 4
 		jr			ra
 	
 	CONFIG_PATH:
@@ -320,16 +320,20 @@ DrinkBuffOffset			equ 0x09908FCC
 	CONFIG_BIN:
 		.fill 0x30, 0x00
 		
+	.include "source/ULES00318/HallSelectFix.asm"	
 	.include "source/ULES00318/CatSkills.asm"	
 	.include "source/ULES00318/DrinkBuff.asm"
 	.include "source/ULES00318/DosBonuses.asm"
 	.include "source/ULES00318/FileLoader.asm"	
 	.include "source/ULES00318/EventLoader.asm"
 	
-	.include "source/ULES00318/HallSelectFix.asm"
 	
 	.org 0x0882D2B0 ; Supply Chest Delay Fix
 		.dh			1
+		
+	.org HallSelectWHook
+		j			HallSelectW
+		nop
 .close
 
 .open "build/ULES00318/DATA.BIN", 0
