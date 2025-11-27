@@ -1,3 +1,4 @@
+SetGrannyGift			equ 0x08848A84
 SeedOffset				equ 0x09853FDA
 DosBonusFlags			equ 0x09857748
 MonsterInfo				equ 0x09853F68
@@ -7,7 +8,7 @@ GetGameState0			equ 0x088450C8
 GetGameState1			equ 0x08845334
 SetQuestState			equ 0x0884508C
 GarugaState				equ 0x098532E1
-
+GenerateCats			equ 0x0992F370
 
 	CheckGameState:
 		addiu		sp, sp, -4
@@ -27,18 +28,64 @@ GarugaState				equ 0x098532E1
 		addiu		sp, sp, 4 
 		jr			ra
 		nop
+		
+	GrannyGift:
+		la			t3, SeedOffset
+		lh			t3, 0x0(t3)
+		srl			t3, t3, 0x8
+		andi		t3, t3, 0xFF
+		li			t4, 0x19 ; 0x19 / 0xFF chance (~10%)
+		sltu		t3, t3, t4
+		sll			t3, t3, 0x1
+		andi		v1, a0, -0x3
+		or			v1, v1, t3
+		la			t3, DosBonusFlags
+		sw			v1, 0x0(t3)
+		lw			ra, 0xC(sp)
+		lw			s0, 0x8(sp)
+		jr			ra
+		addiu		sp, sp, 0x10
 
 	DosBonus:
 		beq			a0, zero, Return
 		nop
+		move		t1, a0
+		la			a0, GenerateCats
+		lw			a1, 0x0(a0)
+		lui			a2, 0x2A43
+		ori			a2, 0x0005
+		bne			a1, a2, SkipGenCat
+		nop
+		addi		a2, a2, 0x1
+		sw			a2, 0x0(a0)
+		
+	SkipGenCat:
+		; Create hook
+		la			t0, SetGrannyGift
+		lw			a0, -0x4(t0)
+		li			a1, 0xAE044728
+		bne			a0, a1, Return
+		nop
+		la			a0, GrannyGift
+		srl			a0, a0, 0x2
+		lui			a1, 0x0800
+		addu		a0, a1, a0
+		sw			a0, 0x0(t0) ; j GrannyGift
+		sw			zero, 0x4(t0) ; nop
+		
 		addiu		sp, sp, -0xC
 		sw			s2, 0x8(sp)
 		sw			s1, 0x4(sp)
 		sw			s0, 0x0(sp)
 		
-		li			s0, 0x3123 ; Bonus Flags
-		andi		a0, a0, 0x4
-		or			s0, s0, a0 ; Poogie Costume
+		la			t0, DosBonusFlags
+		lh			s0, 0x0(t0)
+		ori			s0, s0, 0x3125
+		andi		t1, t1, 0x4
+		xori		t1, t1, 0x4
+		nor			t1, zero, t1
+		and			s0, s0, t1 ; Poogie Costume
+		
 		
 		la			t0, GarugaState
 		lb			t0, 0x0(t0)
@@ -127,16 +174,6 @@ GarugaState				equ 0x098532E1
 		and			s0, s0, t3
 		or			s0, s0, t1
 		
-		; Granny Gift
-		srl			t0, a0, 0x8
-		andi		t0, t0, 0xFF
-		li			t1, 0x19 ; 0x19 / 0xFF chance (~10%)
-		sltu		t1, t0, t1
-		sll			t1, t1, 0x1
-		xori		t1, t1, 0x2
-		nor			t1, zero, t1
-		and			s0, s0, t1
-		
 		la			t0, TimesConnected
 		lw			t1, 0x0(t0)
 		addi		t1, t1, 0x1
@@ -177,4 +214,3 @@ GarugaState				equ 0x098532E1
 
 		j			DosBonusReturn
 		nop
-		
