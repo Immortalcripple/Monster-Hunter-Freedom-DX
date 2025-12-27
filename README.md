@@ -2,6 +2,8 @@
 
 <img src="/assets/FreedomDXTitle.png" width="480px"/>
 
+Monster Hunter Freedom DX is an enhancement patch that adds toggleable quality-of-life improvements, control refinements, and technical fixes to all versions of MHF1 (USA, Europe) and MHP1 (Japan). Compatible with original PSP hardware and emulators such as PPSSPP, Freedom DX aims to be the definitive way to play the original Monster Hunter Freedom for veterans and newcomers alike.
+
 All-in-One patch that includes the following:
   - ### Event Quest Loader
     > Read event quests from an external file. By SilverJolteon
