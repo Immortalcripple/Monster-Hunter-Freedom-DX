@@ -18,6 +18,7 @@ SnSDebuffOffset			equ 0x098D9B70
 KCatSkillsOffset		equ 0x098DAA34
 GCatSkillsOffset		equ 0x09931F88
 DrinkBuffOffset			equ 0x09908FCC
+SupplyChestDelayOffset	equ 0x0882D2B0
 
 .open "build/ULES00318/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -93,6 +94,9 @@ DrinkBuffOffset			equ 0x09908FCC
 		jal			DosBonus
 		lb			a0, 0x18(v0)
 	DosBonusReturn:
+		la			v0, CONFIG_BIN
+		jal			SupplyChestDelay
+		lb			a0, 0x19(v0)
 		j			HookReturn
 		nop
 		
@@ -304,6 +308,20 @@ DrinkBuffOffset			equ 0x09908FCC
 		sw			a0, 0x4(t0)
 		j			Return
 		nop
+		
+	SupplyChestDelay:
+		beq			a0, zero, Return
+		nop
+		la			t0, SupplyChestDelayOffset
+		li			t1, 0x1E
+		lb			t2, 0x0(t0)
+		bne			t1, t2, SupplyChestDelayReturn
+		nop
+		li			t1, 0x1
+		sb			t1, 0x0(t0)
+	SupplyChestDelayReturn:
+		j			Return
+		nop
 	
 	Return:
 		jr			ra
@@ -326,10 +344,6 @@ DrinkBuffOffset			equ 0x09908FCC
 	.include "source/ULES00318/DosBonuses.asm"
 	.include "source/ULES00318/FileLoader.asm"	
 	.include "source/ULES00318/EventLoader.asm"
-	
-	
-	.org 0x0882D2B0 ; Supply Chest Delay Fix
-		.dh			1
 		
 	.org HallSelectWHook
 		j			HallSelectW

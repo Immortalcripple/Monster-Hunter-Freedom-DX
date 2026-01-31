@@ -4,7 +4,7 @@ sceIoOpen				equ	0x088B0004
 sceIoLseek				equ	0x088B000C
 sceIoRead				equ	0x088AFFD4
 sceIoClose				equ	0x088AFFEC
-sceKDWIA				equ	0x088B01FC ; sceKernelDcacheWritebackInvalidateAll
+sceKDWIA				equ	0x088B01F4 ; sceKernelDcacheWritebackInvalidateAll
 
 FONT					equ 0x0982B500
 drawText				equ 0x08871B50
@@ -18,16 +18,17 @@ SnSDebuffOffset			equ 0x098D8DB0
 KCatSkillsOffset		equ 0x098D9B2C
 GCatSkillsOffset		equ 0x09931080
 DrinkBuffOffset			equ 0x09907FEC
+SupplyChestDelayOffset	equ 0x0882CF04
 
 .open "build/ULUS10084/EBOOT.BIN", 0x0880326C
 	; Hook
 	.org 0x08844B88
-		jal 		0x088C0CA0
+		jal 		0x088C1510
 		
 	.org 0x08844A2C
 		jal			FileLoaderSetIndex
 
-	.org 0x088C0CA0
+	.org 0x088C1510
 		addiu		sp, sp, -0x4
 		sw			ra, 0x00(sp)
 		la			t0, DEST
@@ -93,6 +94,9 @@ DrinkBuffOffset			equ 0x09907FEC
 		jal			DosBonus
 		lb			a0, 0x18(v0)
 	DosBonusReturn:
+		la			v0, CONFIG_BIN
+		jal			SupplyChestDelay
+		lb			a0, 0x19(v0)
 		j			HookReturn
 		nop
 		
@@ -304,6 +308,20 @@ DrinkBuffOffset			equ 0x09907FEC
 		sw			a0, 0x4(t0)
 		j			Return
 		nop
+		
+	SupplyChestDelay:
+		beq			a0, zero, Return
+		nop
+		la			t0, SupplyChestDelayOffset
+		li			t1, 0x1E
+		lb			t2, 0x0(t0)
+		bne			t1, t2, SupplyChestDelayReturn
+		nop
+		li			t1, 0x1
+		sb			t1, 0x0(t0)
+	SupplyChestDelayReturn:
+		j			Return
+		nop
 	
 	Return:
 		jr			ra
@@ -325,12 +343,7 @@ DrinkBuffOffset			equ 0x09907FEC
 	.include "source/ULUS10084/DrinkBuff.asm"	
 	.include "source/ULUS10084/DosBonuses.asm"	
 	.include "source/ULUS10084/FileLoader.asm"			
-	.include "source/ULUS10084/EventLoader.asm"
-	
-	
-	.org 0x0882CF04 ; Supply Chest Delay Fix
-		.dh			1
-		
+	.include "source/ULUS10084/EventLoader.asm"		
 			
 	.org HallSelectWHook
 		j			HallSelectW

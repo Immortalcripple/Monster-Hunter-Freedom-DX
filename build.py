@@ -5,7 +5,7 @@ import shutil
 import pycdlib
 import subprocess
 
-VERSION = "v1.4.0"
+VERSION = "v1.6.5"
 
 iso_dir = "iso"
 asm_src_dir = "source"
@@ -18,8 +18,16 @@ mhff = os.path.join("tools", "mhff", "psp", "data.py")
 mhtools = os.path.join("tools", "mhtools.jar")
 pspdecrypt = os.path.join("tools", "pspdecrypt.exe")
 
+JPNPATCH = "EN"
+
 def patchDB(folder):
-    patch = os.path.join(asm_src_dir, folder, "Enhanced.xdelta")
+    if(folder == "ULJM05066" and JPNPATCH == "EN"):
+        patchfile = "Enhanced_EN.xdelta"
+    elif(folder == "ULJM05066" and JPNPATCH == "JP"):
+        patchfile = "Enhanced_JP.xdelta"
+    else:
+        patchfile = "Enhanced.xdelta"
+    patch = os.path.join(asm_src_dir, folder, patchfile)
     unmodified = os.path.join(build_dir, folder,  "DATA.BIN")
     modified = os.path.join(build_dir, folder, "DATA.BIN_patched")
     subprocess.run(
@@ -35,7 +43,7 @@ def buildASM():
     for folder in os.listdir(build_dir):
         path = os.path.join(asm_src_dir, folder)
         subprocess.run(
-            [armips, os.path.join(path, "main.asm"), "-temp", os.path.join(path, "log.txt")],
+            [armips, os.path.join(path, "main.asm")],
             check=True
         )
 
