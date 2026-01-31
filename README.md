@@ -7,8 +7,6 @@ All-in-One patch that includes the following:
     > Read event quests from an external file. By SilverJolteon
   - ### Input Drop Fix
     > Fixes issue where button inputs are ignored. By YuzucchiNyan
-  - ### Instant supply box collection
-    > Removed delay when taking items from supply box. Ported by SilverJolteon from IncognitoMan's FUC
   - ### Hold to Gather
     > Allows you to simply press and hold the gather button when crouched. Configurable. By YuzucchiNyan
   - ### True Raw
@@ -147,7 +145,9 @@ All-in-One patch that includes the following:
       
       </div>
       </details>
-  
+      
+  - ### Instant Supply Box Collection
+    > Removes delay when taking items from supply box. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
   - ### English Menu Patch (Portable)
     > Translates Menus, Items, Equipment, Skills, etc. into English. By YuzucchiNyan
   - ### English Quest Patch (Portable)
