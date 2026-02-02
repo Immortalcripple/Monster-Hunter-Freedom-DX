@@ -9,8 +9,6 @@ RETURN_INVALID	equ 0x098EF148
 
 drawTexture		equ 0x08831510
 CURSOR_POS		equ 0x09941180
-FONT			equ 0x0982B500
-drawText		equ 0x08871DCC
 EVENT_TXT_EN	equ 0x094CC56A
 
 	EventLoader:
@@ -142,7 +140,7 @@ EVENT_TXT_EN	equ 0x094CC56A
 			addi	a2, v0, 0x8 ; Text Y Coordinate
 			li		t0, 0x05 ; 0x9
 			li		t1, EVENT_TXT_EN
-			jal		drawText
+			jal		drawShadowedText
 			li		a3, 0x1		
 			lw		v0, 0xC(sp)
 			addi	v0, v0, 0x24

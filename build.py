@@ -41,14 +41,16 @@ def patchDB(folder):
 
 def buildASM():
     for folder in os.listdir(build_dir):
+        print(f"Building ASM for {folder}.iso...")
         path = os.path.join(asm_src_dir, folder)
         subprocess.run(
             [armips, os.path.join(path, "main.asm")],
             check=True
         )
 
-def creatPatches():
+def createPatches():
     for folder in os.listdir(build_dir):
+        print(f"Creating xdelta patch for {folder}.iso...")
         unmodified = os.path.join(iso_dir, f"{folder}.iso")
         modified = os.path.join(build_dir, folder, f"{folder}.iso")
         patch = os.path.join(build_dir, folder, f"{folder}.xdelta")
@@ -62,6 +64,7 @@ def creatPatches():
 def patchISOs():
     for folder in os.listdir(build_dir):
         iso = os.path.join(build_dir, folder, f"{folder}.iso")
+        print(f"Patching DATA.BIN for {folder}.iso...")
         subprocess.run(
             [umd_replace, iso, "/PSP_GAME/USRDIR/DATA.BIN", os.path.join(build_dir, folder, "DATA.BIN")],
             check=True,
@@ -69,6 +72,7 @@ def patchISOs():
             stderr=subprocess.STDOUT
         )
         #os.remove(os.path.join(build_dir, folder, "DATA.BIN"))
+        print(f"Patching EBOOT.BIN for {folder}.iso...")
         subprocess.run(
             [umd_replace, iso, "/PSP_GAME/SYSDIR/EBOOT.BIN", os.path.join(build_dir, folder, "EBOOT.BIN")],
             check=True,
@@ -76,6 +80,7 @@ def patchISOs():
             stderr=subprocess.STDOUT
         )
         #os.remove(os.path.join(build_dir, folder, "EBOOT.BIN"))
+        print(f"Patching PARAM.SFO for {folder}.iso...")
         subprocess.run(
             [umd_replace, iso, "/PSP_GAME/PARAM.SFO", os.path.join(build_dir, folder, "PARAM.SFO")],
             check=True,
@@ -97,6 +102,7 @@ def patchISOs():
 
 
 def addImage(folder, files, image):
+    print(f"Replacing title screen image for {folder}.iso...")
     path = os.path.join(build_dir, folder, "DATA.BIN")
     patched = 0
     for file in files:
@@ -158,10 +164,12 @@ def setParamInfo():
         path = os.path.join(build_dir, folder, "PARAM.SFO")
         if folder == "ULJM05066":
             with open(path, "r+b") as fp:
+                print(f"Setting PARAM.SFO info for {folder}.iso...")
                 fp.seek(0x158)
                 fp.write(f"MONSTER HUNTER PORTABLE DX {VERSION}".encode("ascii").ljust(40, b"\x00")) 
         elif folder == "ULUS10084" or folder == "ULES00318":
             with open(path, "r+b") as fp:
+                print(f"Setting PARAM.SFO info for {folder}.iso...")
                 fp.seek(0x158)
                 fp.write(f"MONSTER HUNTER FREEDOM DX {VERSION}".encode("ascii").ljust(40, b"\x00")) 
  
@@ -195,7 +203,7 @@ def extractData():
             iso.close()
             shutil.copyfile(os.path.join(iso_dir, file), os.path.join(build_dir, game_id, f"{game_id}.iso"))
             os.rename(os.path.join(iso_dir, file), os.path.join(iso_dir, f"{game_id}.iso"))
-            print("Decrypting EBOOT.BIN...")
+            print(f"Decrypting EBOOT.BIN for {file}...")
             subprocess.run(
                 [pspdecrypt, os.path.join(dir, "EBOOT.BIN")],
                 check=True,
@@ -215,4 +223,5 @@ if __name__ == "__main__":
     addImages()
     buildASM()
     patchISOs()
-    creatPatches()
+    createPatches()
+    print("Done!")

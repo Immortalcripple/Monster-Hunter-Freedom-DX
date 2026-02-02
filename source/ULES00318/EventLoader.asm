@@ -9,8 +9,6 @@ RETURN_INVALID	equ 0x098F0118
 
 drawTexture		equ 0x088318E4
 CURSOR_POS		equ 0x09942100
-FONT			equ 0x0982C280
-drawText		equ 0x08872660
 EVENT_TXT_EN	equ 0x094CD33A
 EVENT_TXT_FR	equ 0x094CD7AD
 EVENT_TXT_DE	equ 0x094CD6E0
@@ -25,10 +23,8 @@ EVENT_TXT_IT	equ 0x094CD533
 		; Open quests file
 		la		a0, QUESTS_BIN
 		li		a1, 0x1
-		li		a2, 0x0
-		li		a3, 0x0
 		jal		sceIoOpen
-		li		t0, 0x0
+		li		a2, 0x0
 		; Check if file exists
 		li		v1, 0x80010002
 		beq		v0, v1, NoFile ; Return - no event quests found
@@ -193,7 +189,7 @@ EVENT_TXT_IT	equ 0x094CD533
 			addi	a2, v0, 0x8 ; Text Y Coordinate
 			li		t0, 0x05 ; Color
 			;li		t1, EVENT_TXT_FR
-			jal		drawText
+			jal		drawShadowedText
 			li		a3, 0x1		
 			lw		v0, 0xC(sp)
 			addi	v0, v0, 0x24
@@ -217,5 +213,5 @@ EVENT_TXT_IT	equ 0x094CD533
 			nop
 		
 			QUESTS_BIN:
-				.ascii "ms0:/PSP/SAVEDATA/ULES00318QST/MHPSP.bin"
+				.ascii "ms0:/PSP/SAVEDATA/FDXDAT/EVENT.BIN"
 				.align 0x4
