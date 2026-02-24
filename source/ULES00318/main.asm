@@ -19,6 +19,8 @@ KCatSkillsOffset		equ 0x098DAA34
 GCatSkillsOffset		equ 0x09931F88
 DrinkBuffOffset			equ 0x09908FCC
 SupplyChestDelayOffset	equ 0x0882D2B0
+FOVOffset				equ 0x0886B50C
+CameraPosOffset			equ 0x08816218
 
 .open "build/ULES00318/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -97,6 +99,10 @@ SupplyChestDelayOffset	equ 0x0882D2B0
 		la			v0, CONFIG_BIN
 		jal			SupplyChestDelay
 		lb			a0, 0x19(v0)
+		jal			FOV
+		lb			a0, 0x1A(v0)
+		jal			CameraPos
+		lb			a0, 0x1B(v0)
 		j			HookReturn
 		nop
 		
@@ -322,6 +328,26 @@ SupplyChestDelayOffset	equ 0x0882D2B0
 	SupplyChestDelayReturn:
 		j			Return
 		nop
+		
+	FOV:
+		la			t0, FOVOffset
+		li			t1, 0x5F
+		lb			t2, 0x0(t0)
+		bne			t2, t1, Return
+		nop
+		sb			a0, 0x0(t0)
+		j			Return
+		nop
+		
+	CameraPos:
+		la			t0, CameraPosOffset
+		li			t1, 0x3
+		lb			t2, 0x0(t0)
+		bne			t2, t1, Return
+		nop
+		sb			a0, 0x0(t0)
+		j			Return
+		nop
 	
 	Return:
 		jr			ra
@@ -387,4 +413,7 @@ SupplyChestDelayOffset	equ 0x0882D2B0
 	.org 0x1a871410
 		j		EventLoader
 		nop
+		
+	.org 0x1A88B16C ; Offline Treasure Quests
+		.word 0x10000005
 .close

@@ -5,7 +5,7 @@ import shutil
 import pycdlib
 import subprocess
 
-VERSION = "v1.6.5"
+VERSION = "v1.7.0"
 
 iso_dir = "iso"
 asm_src_dir = "source"
