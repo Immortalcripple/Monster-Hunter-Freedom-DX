@@ -19,8 +19,13 @@ KCatSkillsOffset		equ 0x098D92AC
 GCatSkillsOffset		equ 0x099308C0
 DrinkBuffOffset			equ 0x09907784
 SupplyChestDelayOffset	equ 0x0882CFA4
-FOVOffset				equ 0x0886AC1C
-CameraPosOffset			equ 0x08816218
+FOVOffset0				equ 0x08816038
+FOVOffset1				equ 0x088161D4
+FOVOffset2				equ 0x088162E8
+FOVOffset3				equ 0x0886AC1C
+FOVOffset4				equ 0x0886D1AC
+CameraPosOffset			equ 0x098522A4
+TreshiOffset			equ 0x09908624
 
 .open "build/ULJM05066/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -103,6 +108,8 @@ CameraPosOffset			equ 0x08816218
 		lb			a0, 0x1A(v0)
 		jal			CameraPos
 		lb			a0, 0x1B(v0)
+		jal			Treshi
+		lb			a0, 0x1C(v0)
 		j			HookReturn
 		nop
 		
@@ -329,11 +336,15 @@ CameraPosOffset			equ 0x08816218
 		nop
 		
 	FOV:
-		la			t0, FOVOffset
-		li			t1, 0x5F
-		lb			t2, 0x0(t0)
-		bne			t2, t1, Return
-		nop
+		la			t0, FOVOffset0
+		sb			a0, 0x0(t0)
+		la			t0, FOVOffset1
+		sb			a0, 0x0(t0)
+		la			t0, FOVOffset2
+		sb			a0, 0x0(t0)
+		la			t0, FOVOffset3
+		sb			a0, 0x0(t0)
+		la			t0, FOVOffset4
 		sb			a0, 0x0(t0)
 		j			Return
 		nop
@@ -341,10 +352,23 @@ CameraPosOffset			equ 0x08816218
 	CameraPos:
 		la			t0, CameraPosOffset
 		li			t1, 0x3
-		lb			t2, 0x0(t0)
+		lbu			t2, 0x0(t0)
 		bne			t2, t1, Return
 		nop
 		sb			a0, 0x0(t0)
+		j			Return
+		nop
+		
+	Treshi:
+		la			t0, TreshiOffset
+		li			t1, 0x14400005
+		lw			t2, 0x0(t0)
+		bne			t2, t1, Return
+		nop
+		beq			a0, zero, Return
+		nop
+		li			t1, 0x1000
+		sh			t1, 0x2(t0)
 		j			Return
 		nop
 	
@@ -379,7 +403,4 @@ CameraPosOffset			equ 0x08816218
 	.org 0x1A6AA0F8
 		j		EventLoader
 		nop
-	
-	.org 0x1A6C3F24 ; Offline Treasure Quests
-		.word 0x10000005
 .close

@@ -13,6 +13,10 @@ All-in-One patch that includes the following:
     > Displays the non-bloated "true" raw attack value of weapons. Configurable. EUR version by YuzucchiNyan, ported to JPN and USA by SilverJolteon
   - ### Early Kill Lao-Shan Lung
     > Disables the HP threshold that prevents killing Lao-Shan Lung before reaching the final area. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
+  - ### Field of View
+    > Adjusts your field of vision. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
+  - ### Starting Vertical Camera Position
+    > Sets the starting vertical camera position when you embark on a quest. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
   - ### Minimap Scale
     > Sets the scale for the minimap. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
   - ### Sword & Shield Debuff
@@ -148,6 +152,8 @@ All-in-One patch that includes the following:
       
   - ### Instant Supply Box Collection
     > Removes delay when taking items from supply box. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
+  - ### Offline Treasure Quests
+    > Allows going on treasure quests solo in the offline gathering hall. Configurable. By SilverJolteon with help from 8sm32K4D1K5f3E
   - ### English Menu Patch (Portable)
     > Translates Menus, Items, Equipment, Skills, etc. into English. By YuzucchiNyan
   - ### English Quest Patch (Portable)
