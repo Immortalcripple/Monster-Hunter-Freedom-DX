@@ -172,7 +172,8 @@ Use [this](https://silverjolteon.github.io/FreedomDX/config_editor.html) online 
 
 - Freedom Enhanced by [YuzucchiNyan](https://github.com/GReinoso96)
 - Special thanks to [IncognitoMan](https://github.com/IncognitoMan) and [Kurogami2134](https://github.com/Kurogami2134) for tips and their own ASM as a groundwork.
-- Special thanks as well to [Immortalcripple](https://github.com/Immortalcripple) and Barry1990 for helping out with testing.
+- Special thanks to [Katie](https://github.com/https://github.com/kethen) for help and tips on PSP functions.
+- Special thanks to [Immortalcripple](https://github.com/Immortalcripple) and Barry1990 for helping out with testing.
 - English quests translated by [GrenderG](https://github.com/GrenderG)
 - Dos Bonus Connection Bypass Cheat by [PoogieCharger](https://github.com/mhwikicn/mh-codes-and-patches/tree/main/en)
 - Offline Treasure Quest Cheat by [8sm32K4D1K5f3E](https://github.com/SilverJolteon/FreedomDX/issues/2)
