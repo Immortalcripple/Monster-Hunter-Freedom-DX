@@ -7,6 +7,8 @@ SLTI_V0_S1		equ 0x098EF1DC
 RETURN_VALID	equ	0x098EF154
 RETURN_INVALID	equ 0x098EF148
 
+SP_EVENT_PAGE	equ 0x09941178
+
 drawTexture		equ 0x08831510
 CURSOR_POS		equ 0x09941180
 EVENT_TXT_EN	equ 0x094CC56A
@@ -16,6 +18,24 @@ EVENT_TXT_EN	equ 0x094CC56A
 		addiu	sp, sp, -8
 		sw		s0, 0x4(sp)
 		sw		v0, 0x0(sp)
+		; Check if init
+		lui		t0, 0x0800
+		bgt		s1, t0, OPEN_EVENT_BIN
+		nop
+		j		CHECK_PAGE
+		nop
+		
+	CHECK_PAGE:
+		la		t0, SP_EVENT_PAGE
+		lh		a0, 0x0(t0)
+		addi	a0, a0, -0xEA61
+		andi	a0, a0, 0xFFFF
+		beq		a0, a1, OPEN_EVENT_BIN
+		nop
+		j		RESTORE_VALID
+		nop		
+		
+	OPEN_EVENT_BIN:
 		; Open quests file
 		la		a0, QUESTS_BIN
 		li		a1, 0x1
@@ -40,6 +60,14 @@ EVENT_TXT_EN	equ 0x094CC56A
 		li		a0, 0x6800
 		div		v0, a0
 		mflo	a0 ; Page num
+		li		t0, 0x32 ; Max 50 pages
+		bge		a0, t0, clamp_pages
+		nop
+		j		end_clamp_pages
+		nop
+	clamp_pages:
+		move	a0, t0
+	end_clamp_pages:
 		li		t0, 0x2A620000
 		addu	t0, t0, a0
 		sw		t0, SLTI_V0_S3 ; slti v0,s3,pages
@@ -73,6 +101,7 @@ EVENT_TXT_EN	equ 0x094CC56A
 		jal		sceKDWIA
 		nop
 		; Restore registers backup and return
+	RESTORE_VALID:
 		jal		Restore
 		nop
 		j		RETURN_VALID ; Jump back

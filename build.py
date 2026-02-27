@@ -18,15 +18,13 @@ mhff = os.path.join("tools", "mhff", "psp", "data.py")
 mhtools = os.path.join("tools", "mhtools.jar")
 pspdecrypt = os.path.join("tools", "pspdecrypt.exe")
 
-JPNPATCH = "EN"
+ENGLISH_PATCH = 1
 
 def patchDB(folder):
-    if(folder == "ULJM05066" and JPNPATCH == "EN"):
-        patchfile = "Enhanced_EN.xdelta"
-    elif(folder == "ULJM05066" and JPNPATCH == "JP"):
-        patchfile = "Enhanced_JP.xdelta"
+    if(folder == "ULJM05066" and ENGLISH_PATCH):
+        patchfile = "EnglishPatch.xdelta"
     else:
-        patchfile = "Enhanced.xdelta"
+        return;
     patch = os.path.join(asm_src_dir, folder, patchfile)
     unmodified = os.path.join(build_dir, folder,  "DATA.BIN")
     modified = os.path.join(build_dir, folder, "DATA.BIN_patched")

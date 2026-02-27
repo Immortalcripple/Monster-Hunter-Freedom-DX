@@ -437,4 +437,7 @@ TreshiOffset			equ 0x09909E6C
 	.org 0x1a871410
 		j		EventLoader
 		nop
+		
+	.org 0x1A8C4ABC ; Input Drop Fix
+		.word 0x1060000C
 .close
