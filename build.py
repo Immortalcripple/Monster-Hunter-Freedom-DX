@@ -5,12 +5,13 @@ import shutil
 import pycdlib
 import subprocess
 
-VERSION = "v1.7.0"
+VERSION = "v1.7.1"
 
 iso_dir = "iso"
 asm_src_dir = "source"
 build_dir = "build"
 assets = "assets"
+quests_dir = "quests"
 armips = os.path.join("tools", "armips.exe")
 umd_replace = os.path.join("tools", "UMD-replace.exe")
 xdelta = os.path.join("tools", "xdelta.exe")
@@ -19,6 +20,36 @@ mhtools = os.path.join("tools", "mhtools.jar")
 pspdecrypt = os.path.join("tools", "pspdecrypt.exe")
 
 ENGLISH_PATCH = 1
+
+QUESTS_LANG = "EN"
+
+games = []
+
+def createFolder(folder):
+    if os.path.exists(folder):
+        shutil.rmtree(folder)
+    os.makedirs(folder, exist_ok=True)
+
+def combineQuests():
+    print("Building EVENT.BIN...")
+    quests = os.path.join(quests_dir, QUESTS_LANG)
+    mib_files = sorted([f for f in os.listdir(quests) if f.lower().endswith(".mib")])
+    quest_size = 0x6800
+    
+    output = os.path.join(build_dir, "FDXDAT", "EVENT.BIN")
+    with open(output, 'wb') as fp:
+        for f in mib_files:
+            quest = os.path.join(quests, f)
+            with open(quest, "rb") as q:
+                data = q.read()
+                size = len(data)
+                
+                if(size < quest_size):
+                    data += b"\x00" * (quest_size - size)
+                elif(size > quest_size):
+                    data = data[:quest_size]
+                fp.write(data)
+  
 
 def patchDB(folder):
     if(folder == "ULJM05066" and ENGLISH_PATCH):
@@ -38,7 +69,7 @@ def patchDB(folder):
     os.rename(modified, unmodified)
 
 def buildASM():
-    for folder in os.listdir(build_dir):
+    for folder in games:
         print(f"Building ASM for {folder}.iso...")
         path = os.path.join(asm_src_dir, folder)
         subprocess.run(
@@ -47,7 +78,7 @@ def buildASM():
         )
 
 def createPatches():
-    for folder in os.listdir(build_dir):
+    for folder in games:
         print(f"Creating xdelta patch for {folder}.iso...")
         unmodified = os.path.join(iso_dir, f"{folder}.iso")
         modified = os.path.join(build_dir, folder, f"{folder}.iso")
@@ -60,7 +91,7 @@ def createPatches():
         )
 
 def patchISOs():
-    for folder in os.listdir(build_dir):
+    for folder in games:
         iso = os.path.join(build_dir, folder, f"{folder}.iso")
         print(f"Patching DATA.BIN for {folder}.iso...")
         subprocess.run(
@@ -186,9 +217,7 @@ def extractData():
             if not (game_id == "ULUS10084" or game_id == "ULES00318" or game_id == "ULJM05066"):
                 continue
             dir = os.path.join(build_dir, game_id)
-            if os.path.exists(dir):
-                shutil.rmtree(dir)
-            os.makedirs(dir, exist_ok=True)
+            createFolder(dir)
             print(f"Extracting DATA.BIN from {file}...")
             with open(os.path.join(dir, "DATA.BIN"), "wb") as data_bin:
                 iso.get_file_from_iso_fp(data_bin, iso_path="/PSP_GAME/USRDIR/DATA.BIN")
@@ -210,16 +239,21 @@ def extractData():
             )
             os.remove(os.path.join(dir, "EBOOT.BIN"))
             os.rename(os.path.join(dir, "EBOOT.BIN.dec"), os.path.join(dir, "EBOOT.BIN"))
+            
+            games.append(game_id)
  
 if __name__ == "__main__":
-    if os.path.exists(build_dir):
-        shutil.rmtree(build_dir)
-    os.makedirs(build_dir, exist_ok=True)
+    createFolder(build_dir)
     
+    FDXDAT = os.path.join(build_dir, "FDXDAT")
+    createFolder(FDXDAT)
+
     extractData()
     setParamInfo()
     addImages()
     buildASM()
     patchISOs()
     createPatches()
+    combineQuests()
+        
     print("Done!")
