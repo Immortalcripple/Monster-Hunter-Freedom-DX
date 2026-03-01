@@ -441,4 +441,7 @@ TreshiOffset			equ 0x09908E8C
 		
 	.org 0x1A297A3C ; Input Drop Fix
 		.word 0x1060000C
+	
+	.org 0x12C4AF25
+		.ascii "DengekiTkt", 0
 .close
