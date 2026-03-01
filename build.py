@@ -5,7 +5,7 @@ import shutil
 import pycdlib
 import subprocess
 
-VERSION = "v1.7.1"
+VERSION = "v1.7.3"
 
 iso_dir = "iso"
 asm_src_dir = "source"
@@ -36,19 +36,22 @@ def combineQuests():
     mib_files = sorted([f for f in os.listdir(quests) if f.lower().endswith(".mib")])
     quest_size = 0x6800
     
+    id = 60001;
     output = os.path.join(build_dir, "FDXDAT", "EVENT.BIN")
     with open(output, 'wb') as fp:
         for f in mib_files:
             quest = os.path.join(quests, f)
             with open(quest, "rb") as q:
-                data = q.read()
+                data = bytearray(q.read())
                 size = len(data)
                 
                 if(size < quest_size):
                     data += b"\x00" * (quest_size - size)
                 elif(size > quest_size):
                     data = data[:quest_size]
+                data[0x5A:0x5C] = id.to_bytes(2, byteorder="little")
                 fp.write(data)
+            id += 1
   
 
 def patchDB(folder):
