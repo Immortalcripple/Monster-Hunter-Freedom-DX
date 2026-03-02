@@ -26,6 +26,7 @@ FOVOffset3				equ 0x0886AC1C
 FOVOffset4				equ 0x0886D1AC
 CameraPosOffset			equ 0x098522A4
 TreshiOffset			equ 0x09908624
+Area9CameraOffset		equ 0x089222B8
 
 .open "build/ULJM05066/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -53,7 +54,21 @@ TreshiOffset			equ 0x09908624
 	
 		jal			HallSelectR
 		nop		
-	
+		
+		; Forest and Hills Area 9 Camera
+		la			t0, Area9CameraOffset
+		
+		li			t1, 0x3F9371ED
+		lw			t2, 0x0(t0)
+		bne			t2, t1, EndArea9Camera
+		nop
+		lui			t1, 0x43F5
+		sw			t1, 0x48(t0)
+		lui			t1, 0x43F5
+		sw			t1, 0x68(t0)
+		lui			t1, 0x43E1
+		sw			t1, 0x88(t0)
+	EndArea9Camera:
 	ReadConfig:
 		; Open config file
 		la			a0, CONFIG_PATH
@@ -407,12 +422,4 @@ TreshiOffset			equ 0x09908624
 	; Input Drop Fix
 	.org 0x1A6FD9CC
 		.word 0x1060000C
-		
-	; Forest and Hills Area 9 Camera	
-	.org 0x206E1098
-		.word 0x43F50000
-	.org 0x206E10B8
-		.word 0x43F50000
-	.org 0x206E10D8
-		.word 0x43E10000
 .close

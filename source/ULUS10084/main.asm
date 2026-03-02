@@ -26,6 +26,7 @@ FOVOffset3				equ 0x0886AD48
 FOVOffset4				equ 0x0886D2D8
 CameraPosOffset			equ 0x09852B24
 TreshiOffset			equ 0x09908E8C
+Area9CameraOffset		equ 0x08922AD8
 
 .open "build/ULUS10084/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -54,20 +55,34 @@ TreshiOffset			equ 0x09908E8C
 		jal			HallSelectR
 		nop	
 		
+		; Forest and Hills Area 9 Camera
+		la			t0, Area9CameraOffset
+		
+		li			t1, 0x3F9371ED
+		lw			t2, 0x0(t0)
+		bne			t2, t1, EndArea9Camera
+		nop
+		lui			t1, 0x43F5
+		sw			t1, 0x48(t0)
+		lui			t1, 0x43F5
+		sw			t1, 0x68(t0)
+		lui			t1, 0x43E1
+		sw			t1, 0x88(t0)
+	EndArea9Camera:	
 	ReadConfig:
 		; Open config file
-		la		a0, CONFIG_PATH
-		li		a1, 0x1
-		li		a2, 0x0
-		li		a3, 0x0
-		jal		sceIoOpen
-		li		t0, 0x0
+		la			a0, CONFIG_PATH
+		li			a1, 0x1
+		li			a2, 0x0
+		li			a3, 0x0
+		jal			sceIoOpen
+		li			t0, 0x0
 		; Check if config exists
-		li		v1, 0x80010002
-		beq		v0, v1, HookReturn
+		li			v1, 0x80010002
+		beq			v0, v1, HookReturn
 		nop
-		li		v1, 0x0
-		move	s0, v0	
+		li			v1, 0x0
+		move		s0, v0	
 		; Read config
 		move		a0, s0
 		li			a1, CONFIG_BIN
@@ -429,7 +444,6 @@ TreshiOffset			equ 0x09908E8C
 		.word 0x00290198
 	.org 0x1A288AEC
 		.word 0x008C0118
-
 		
 	.org 0x1A247C94
 		jal		EventMenu
@@ -446,12 +460,4 @@ TreshiOffset			equ 0x09908E8C
 	; Dengeki Ticket	
 	.org 0x12C4AF25
 		.ascii "DengekiTkt", 0
-		
-	; Forest and Hills Area 9 Camera	
-	.org 0x2028E098
-		.word 0x43F50000
-	.org 0x2028E0B8
-		.word 0x43F50000
-	.org 0x2028E0D8
-		.word 0x43E10000
 .close
