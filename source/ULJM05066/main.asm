@@ -403,7 +403,16 @@ TreshiOffset			equ 0x09908624
 	.org 0x1A6AA0F8
 		j		EventLoader
 		nop
-	
-	.org 0x1A6FD9CC ; Input Drop Fix
+		
+	; Input Drop Fix
+	.org 0x1A6FD9CC
 		.word 0x1060000C
+		
+	; Forest and Hills Area 9 Camera	
+	.org 0x206E1098
+		.word 0x43F50000
+	.org 0x206E10B8
+		.word 0x43F50000
+	.org 0x206E10D8
+		.word 0x43E10000
 .close

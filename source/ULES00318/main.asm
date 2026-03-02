@@ -438,9 +438,19 @@ TreshiOffset			equ 0x09909E6C
 		j		EventLoader
 		nop
 		
-	.org 0x1A8C4ABC ; Input Drop Fix
+	; Input Drop Fix
+	.org 0x1A8C4ABC
 		.word 0x1060000C
-		
+	
+	; Dengeki Ticket
 	.org 0x12C4B03A
 		.ascii "DengekiTkt", 0
+		
+	; Forest and Hills Area 9 Camera	
+	.org 0x20A91098
+		.word 0x43F50000
+	.org 0x20A910B8
+		.word 0x43F50000
+	.org 0x20A910D8
+		.word 0x43E10000
 .close
