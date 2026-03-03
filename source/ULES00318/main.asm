@@ -454,7 +454,7 @@ Area9CameraOffset		equ 0x089237C8
 		nop
 		
 	; Input Drop Fix	
-	.org 0x1A8C4ABC 
+	.org 0x1A8C4AB4
 		.word 0x1060000C
 		
 	; Dengeki Ticket	
