@@ -154,6 +154,8 @@ All-in-One patch that includes the following:
     > Removes delay when taking items from supply box. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
   - ### Offline Treasure Quests
     > Allows going on treasure quests solo in the offline gathering hall. Configurable. By SilverJolteon with help from 8sm32K4D1K5f3E
+  - ### Forest and Hills - Area 9 Camera Fix
+    > The camera position has been changed to allow more visibility. By SilverJolteon
   - ### English Menu Patch (Portable)
     > Translates Menus, Items, Equipment, Skills, etc. into English. By YuzucchiNyan
   - ### English Quest Patch (Portable)
