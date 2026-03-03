@@ -161,7 +161,7 @@ All-in-One patch that includes the following:
 
 
 ## Usage
-Place the `FDXDAT` folder in `ms0:/PSP/SAVEDATA/` and apply the ISO patch with [DeltaPatcher](https://www.romhacking.net/utilities/704/) to your respective version.
+Place the `FDXDAT` folder in `ms0:/PSP/SAVEDATA/` and apply the ISO patch with either [DeltaPatcher](https://www.romhacking.net/utilities/704/) (PC) or [UniPatcher](https://play.google.com/store/apps/details?id=org.emunix.unipatcher&pcampaignid=web_share) (Android) to your respective version.
 
 Unlike my EventQuestLoader, event quests are now stored in `FDXDAT/EVENT.BIN`.
 
