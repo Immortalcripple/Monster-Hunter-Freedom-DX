@@ -5,6 +5,7 @@ sceIoLseek				equ	0x088B0C34
 sceIoRead				equ	0x088B0BFC
 sceIoClose				equ	0x088B0C14
 sceKDWIA				equ	0x088B0E0C ; sceKernelDcacheWritebackInvalidateAll
+sceWlanGetEtherAddr		equ 0x088B1444
 
 FONT					equ 0x0982C280
 drawText				equ 0x088723E4
@@ -27,7 +28,7 @@ FOVOffset4				equ 0x0886DA9C
 CameraPosOffset			equ 0x098538A4
 TreshiOffset			equ 0x09909E6C
 Area9CameraOffset		equ 0x089237C8
-SetMACAddress			equ 0x0884859C
+MACAddrOffset			equ 0x09858D30
 
 .open "build/ULES00318/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -72,9 +73,13 @@ SetMACAddress			equ 0x0884859C
 	EndArea9Camera:
 	
 		; Set MAC Address
-		li			a0, 0x09854620
-		jal			SetMACAddress
+		la			a0, MACAddrOffset
+		lw			t0, 0x0(a0)
+		beq			t0, zero, EndSetMACAddr
 		nop
+		jal			sceWlanGetEtherAddr
+		nop
+	EndSetMACAddr:
 	
 	ReadConfig:
 		; Open config file
