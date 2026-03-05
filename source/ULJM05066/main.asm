@@ -27,6 +27,7 @@ FOVOffset4				equ 0x0886D1AC
 CameraPosOffset			equ 0x098522A4
 TreshiOffset			equ 0x09908624
 Area9CameraOffset		equ 0x089222B8
+SetMACAddress			equ 0x08847AB0
 
 .open "build/ULJM05066/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -68,7 +69,13 @@ Area9CameraOffset		equ 0x089222B8
 		sw			t1, 0x68(t0)
 		lui			t1, 0x43E1
 		sw			t1, 0x88(t0)
-	EndArea9Camera:
+	EndArea9Camera:	
+	
+		; Set MAC Address
+		li			a0, 0x09853020
+		jal			SetMACAddress
+		nop
+	
 	ReadConfig:
 		; Open config file
 		la			a0, CONFIG_PATH

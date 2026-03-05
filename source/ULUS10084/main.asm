@@ -27,6 +27,7 @@ FOVOffset4				equ 0x0886D2D8
 CameraPosOffset			equ 0x09852B24
 TreshiOffset			equ 0x09908E8C
 Area9CameraOffset		equ 0x08922AD8
+SetMACAddress			equ 0x08847DCC
 
 .open "build/ULUS10084/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -69,6 +70,12 @@ Area9CameraOffset		equ 0x08922AD8
 		lui			t1, 0x43E1
 		sw			t1, 0x88(t0)
 	EndArea9Camera:	
+	
+		; Set MAC Address
+		li			a0, 0x098538A0
+		jal			SetMACAddress
+		nop
+	
 	ReadConfig:
 		; Open config file
 		la			a0, CONFIG_PATH

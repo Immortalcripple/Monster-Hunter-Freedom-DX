@@ -27,6 +27,7 @@ FOVOffset4				equ 0x0886DA9C
 CameraPosOffset			equ 0x098538A4
 TreshiOffset			equ 0x09909E6C
 Area9CameraOffset		equ 0x089237C8
+SetMACAddress			equ 0x0884859C
 
 .open "build/ULES00318/EBOOT.BIN", 0x0880326C
 	; Hook
@@ -69,6 +70,12 @@ Area9CameraOffset		equ 0x089237C8
 		lui			t1, 0x43E1
 		sw			t1, 0x88(t0)
 	EndArea9Camera:
+	
+		; Set MAC Address
+		li			a0, 0x09854620
+		jal			SetMACAddress
+		nop
+	
 	ReadConfig:
 		; Open config file
 		la			a0, CONFIG_PATH
