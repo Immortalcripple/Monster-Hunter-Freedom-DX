@@ -156,6 +156,8 @@ All-in-One patch that includes the following:
     > Allows going on treasure quests solo in the offline gathering hall. Configurable. By SilverJolteon with help from 8sm32K4D1K5f3E
   - ### Forest and Hills - Area 9 Camera Fix
     > The camera position has been changed to allow more visibility. By SilverJolteon
+  - ### MAC Address Bug Fix
+    > In Portable/Freedom, when you create your character, the MAC address of your system is saved into memory. This is used when hunting with other players to increase friendship level. If however, you switch to a different system or randomize the MAC address, that breaks. This has been fixed so that it is automatically updated. By SilverJolteon
   - ### English Menu Patch (Portable)
     > Translates Menus, Items, Equipment, Skills, etc. into English. By YuzucchiNyan
   - ### English Quest Patch (Portable)
