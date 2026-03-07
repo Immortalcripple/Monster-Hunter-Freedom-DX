@@ -252,7 +252,7 @@ if __name__ == "__main__":
     createFolder(FDXDAT)
     NATIVEPSP_JPN = os.path.join(FDXDAT, "ULJM05066")
     createFolder(NATIVEPSP_JPN)
-    translation_files = ["0003", "4673", "4673", "4958", "4960", "4961"]
+    translation_files = ["0003", "4672", "4673", "4673", "4958", "4960", "4961"]
     for f in translation_files:
         shutil.copy(os.path.join("translation", f), os.path.join(NATIVEPSP_JPN, f))
 
