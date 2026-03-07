@@ -4,8 +4,9 @@ import re
 import shutil
 import pycdlib
 import subprocess
+from translation.translate import translate
 
-VERSION = "v1.7.6"
+VERSION = "v1.7.7"
 
 iso_dir = "iso"
 asm_src_dir = "source"
@@ -52,7 +53,6 @@ def combineQuests():
                 data[0x5A:0x5C] = id.to_bytes(2, byteorder="little")
                 fp.write(data)
             id += 1
-  
 
 def patchDB(folder):
     if(folder == "ULJM05066" and ENGLISH_PATCH):
@@ -131,8 +131,6 @@ def patchISOs():
             stderr=subprocess.STDOUT
         )
 
-
-
 def addImage(folder, files, image):
     print(f"Replacing title screen image for {folder}.iso...")
     path = os.path.join(build_dir, folder, "DATA.BIN")
@@ -162,7 +160,9 @@ def addImage(folder, files, image):
         
         
         if not patched:
-            patchDB(folder)
+            if(folder == "ULJM05066" and ENGLISH_PATCH):
+                #patchDB(folder)
+                translate(build_dir)
             patched = 1
         
         with open(path, "rb") as fp:
@@ -250,6 +250,11 @@ if __name__ == "__main__":
     
     FDXDAT = os.path.join(build_dir, "FDXDAT")
     createFolder(FDXDAT)
+    NATIVEPSP_JPN = os.path.join(FDXDAT, "ULJM05066")
+    createFolder(NATIVEPSP_JPN)
+    translation_files = ["0003", "4673", "4673", "4958", "4960", "4961"]
+    for f in translation_files:
+        shutil.copy(os.path.join("translation", f), os.path.join(NATIVEPSP_JPN, f))
 
     extractData()
     setParamInfo()
