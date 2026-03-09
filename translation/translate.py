@@ -1,59 +1,74 @@
+import struct
 import array
 import os
 
-def replace(data_path, repl_path, addr, size):
-    size_adj = 0
-    if not os.path.exists(repl_path):
-        return size_adj
+class Injector:
+    def __init__(self, path):
+        self.path = path
+        with open(path, "rb") as fp:
+            self.data = bytearray(fp.read())
         
-    with open(data_path, "rb") as fp:
-        data_bin = bytearray(fp.read())
-    
-    with open(repl_path, "rb") as fp:
-        repl_data = fp.read()
-        size_adj = len(repl_data) - size
+        toc_size_sectors = struct.unpack_from("<I", self.data, 0)[0]
+        self.toc_size_bytes = toc_size_sectors * 2048
+        self.toc = array.array('I', self.data[:self.toc_size_bytes])
+        total_sectors = len(self.data) // 2048
+        self.file_count = self.toc.index(total_sectors)
+
+    def memset(self, addr, value, size):
+        self.data[addr : addr + size] = bytes([value]) * size
+
+    def memcpy(self, addr, payload):
+        self.data[addr : addr + len(payload)] = bytes(payload)
+
+    def replace(self, index, repl_path):
+        if not os.path.exists(repl_path):
+            return
+
+        with open(repl_path, "rb") as fp:
+            repl_data = fp.read()
+
+        start_offset = self.toc[index] * 2048
+        end_offset = self.toc[index + 1] * 2048
+        old_size = end_offset - start_offset
+
+        if len(repl_data) < old_size:
+            repl_data = repl_data.ljust(old_size, b"\x00")
         
-    if len(repl_data) < size:
-        repl_data = repl_data.ljust(size, b"\x00")
-        
-    before = data_bin[:addr]
-    after = data_bin[addr + size:]
-    
-    combined = before + repl_data + after
-    
-    with open(data_path, "wb") as fp:
-        fp.write(combined)
-    
-    return size_adj
- 
-def memset(data_path, value, addr, size):
-    with open(data_path, "rb") as fp:
-        data_bin = bytearray(fp.read())
-        
-    before = data_bin[:addr]
-    after = data_bin[addr + size:]
-    combined = before + (bytes([value]) * size) + after
-    
-    with open(data_path, "wb") as fp:
-        fp.write(combined)
-        
-def memcpy(data_path, arr, addr):
-    with open(data_path, "rb") as fp:
-        data_bin = bytearray(fp.read())
-        
-    before = data_bin[:addr]
-    after = data_bin[addr + len(arr):]
-    combined = before + bytes(arr) + after
-    
-    with open(data_path, "wb") as fp:
-        fp.write(combined)
+        new_size = len(repl_data)
+
+        if new_size > old_size:
+            diff_bytes = new_size - old_size
+            diff_sectors = diff_bytes // 2048
+            
+            for i in range(index + 1, self.file_count + 1):
+                self.toc[i] += diff_sectors
+                struct.pack_into("<I", self.data, i * 4, self.toc[i])
+
+            self.data[end_offset:end_offset] = b"\x00" * diff_bytes
+
+        self.data[start_offset : start_offset + new_size] = repl_data
+
+    def write(self):
+        with open(self.path, "wb") as f:
+            f.write(self.data)
 
 def translate(build_dir):
     DATA_BIN = os.path.join(build_dir, "ULJM05066", "DATA.BIN")
     if not os.path.exists(DATA_BIN):
         return
-     
-    memset(DATA_BIN, 0, 0x5B00, 0x386)
-    memcpy(DATA_BIN, [0x1A, 0x00, 0x05, 0x34], 0x1A6396D0);
-    memcpy(DATA_BIN, [0x28, 0x00, 0x05, 0x34, 0x38, 0xC5, 0x21, 0x0E, 0x14, 0x00, 0x06, 0x34], 0x1A639D04);
-    replace(DATA_BIN, os.path.join("translation", "4674-4922"), 0x1D757000, 0x2D3800)
+
+    injector = Injector(DATA_BIN)
+
+    injector.memset(0x5B00, 0, 0x386)
+    injector.memcpy(0x1A6396D0, [0x1A, 0x00, 0x05, 0x34])
+    injector.memcpy(0x1A639D04, [0x28, 0x00, 0x05, 0x34, 0x38, 0xC5, 0x21, 0x0E, 0x14, 0x00, 0x06, 0x34])
+
+    path = os.path.join("translation", "data")
+    if os.path.exists(path):
+        files = sorted(os.listdir(path))
+        for f in files:
+            if f.isdigit():
+                print(f"Injecting file {f} into ULJM05066 DATA.BIN...")
+                injector.replace(int(f), os.path.join(path, f))
+
+    injector.write()

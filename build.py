@@ -6,7 +6,7 @@ import pycdlib
 import subprocess
 from translation.translate import translate
 
-VERSION = "v1.7.7"
+VERSION = "v1.7.8 DEBUG"
 
 iso_dir = "iso"
 asm_src_dir = "source"
@@ -250,12 +250,6 @@ if __name__ == "__main__":
     
     FDXDAT = os.path.join(build_dir, "FDXDAT")
     createFolder(FDXDAT)
-    NATIVEPSP_JPN = os.path.join(FDXDAT, "ULJM05066")
-    createFolder(NATIVEPSP_JPN)
-    translation_files = ["0003", "4672", "4673", "4673", "4958", "4960", "4961"]
-    for f in translation_files:
-        shutil.copy(os.path.join("translation", f), os.path.join(NATIVEPSP_JPN, f))
-
     extractData()
     setParamInfo()
     addImages()
