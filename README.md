@@ -105,7 +105,7 @@ All-in-One patch that includes the following:
           <td>3★ Village Quest:<br>“Slay the Velociprey Pack!”</td>
         </tr>
         <tr>
-          <td><b>Armor</b><br>
+          <td><b>Craftable Armor</b><br>
             Chrome Metal Coat<br>
             Silver Boots<br>
             Dark Metal Boots<br>
@@ -117,14 +117,14 @@ All-in-One patch that includes the following:
           <td>-</td>
         </tr>
         <tr>
-          <td><b>Weapons</b><br>
+          <td><b>Craftable Weapons</b><br>
             Ravager Blade+<br>
             Golem Blade+<br>
             Iron Striker+<br>
             Skullcrusher+<br>
             Paladin Lance+<br>
             Barbarian Tusk+<br><br>
-            <b>Armor</b><br>
+            <b>Craftable Armor</b><br>
             Chrome Metal Coil+<br>
             Silver Boots+<br>
             Dark Metal Boots+<br>
@@ -136,7 +136,7 @@ All-in-One patch that includes the following:
           <td>6★ Village Quest:<br>“Horn of the Monoblos”</td>
         </tr>
         <tr>
-          <td><b>Armor</b><br>
+          <td><b>Craftable Armor</b><br>
             Chrome Metal Coat S<br>
             Silver Boots S<br>
             Dark Metal Boots S<br>
