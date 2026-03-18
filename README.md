@@ -154,6 +154,8 @@ All-in-One patch that includes the following:
       
   - ### Instant Supply Box Collection
     > Removes delay when taking items from supply box. Configurable. Ported by SilverJolteon from IncognitoMan's FUC
+  - ### Gathering Hall Select Mode Fix
+    >The gathering hall select mode (Auto/Manual) now persists through reloads. The game will now remember which option you last selected.
   - ### Offline Treasure Quests
     > Allows going on treasure quests solo in the offline gathering hall. Configurable. By SilverJolteon with help from 8sm32K4D1K5f3E
   - ### Forest and Hills - Area 9 Camera Fix
